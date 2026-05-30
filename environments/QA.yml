@@ -1,0 +1,4 @@
+name: QA
+variables:
+  - name: baseURL
+    value: https://6a0b26d121e44562569776b2.mockapi.io/qa

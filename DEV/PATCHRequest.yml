@@ -1,0 +1,26 @@
+info:
+  name: PATCHRequest
+  type: http
+  seq: 6
+
+http:
+  method: PATCH
+  url: "{{baseURL}}/customer/{{d}}"
+  body:
+    type: json
+    data: |-
+      {
+        "lastName": "Sharma"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: d
+      value: "32"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

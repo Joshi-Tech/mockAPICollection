@@ -1,0 +1,48 @@
+info:
+  name: Update a resource
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{baseURL}}/customer/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Madhuri", 
+        "lastName":"Sharma", 
+        "email": "Hriday@hotmail.com",
+        "phone": "0718900000",
+        "address": {
+        "postCode":"TT7 23KJ", 
+        "firstLine": "19 St. Gladiator Road"},
+      "status": "IN-ACTIVE"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code", ()=>{
+          expect(res.status).to.equal(200)
+        })
+
+        test("First name",()=>{
+          expect(res.body.firstName).to.equal("Shri")
+        })
+
+        test("Last name", ()=>{
+          expect(res.body.lastName).to.equal("Prasanna")
+        })
+
+        test("Server", ()=>{
+          expect(res.headers["server"]).to.equal("Heroku")
+        })
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

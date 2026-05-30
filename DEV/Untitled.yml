@@ -1,0 +1,40 @@
+info:
+  name: Untitled
+  type: http
+  seq: 1
+
+http:
+  method: DELETE
+  url: "{{baseURL}}/customer/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Amit", 
+        "lastName":"Joshi", 
+        "email":"amit.4f3029b8@mail.com",
+        "phone": "07189872637",
+        "address": {
+        "postCode":"SL5 9ZQ", 
+        "firstLine": "19 St. Ives Road"},
+      "status": "ACTIVE"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status", ()=>{
+          expect(res.status).to.equal(200)
+        })
+
+        test("Server", ()=>{
+          expect(res.headers["server"]).to.equal("Heroku")
+        })
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

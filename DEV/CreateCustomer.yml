@@ -1,0 +1,90 @@
+info:
+  name: CreateCustomer
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: "{{baseURL}}/customer/"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Madhuri", 
+        "lastName":"Mithi", 
+        "email": "Hriday@hotmail.com",
+        "phone": "0718900000",
+        "address": {
+        "postCode":"SL5 9XY", 
+        "firstLine": "19 MG ROAD"},
+      "status": "ACTIVE"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        //SCHEMA VALIDATIONS
+        test("Response Schema Validation", ()=>{
+          expect(res.body).to.have.property("id");
+          expect(res.body).to.have.property("firstName");
+          expect(res.body).to.have.property("lastName");
+          expect(res.body).to.have.property("email");
+          expect(res.body).to.have.property("dateOfBirth");
+          expect(res.body).to.have.property("customerType");
+          expect(res.body).to.have.property("status");
+          expect(res.body).to.have.property("phone")
+          expect(res.body.address).to.have.property("postCode");
+          expect(res.body.address).to.have.property("firstLine");
+        })
+
+        //RESPONSE TYPE VALIDATION
+        test("Response Fields Type Validation", ()=>{
+          expect(res.body.firstName).to.be.a("string");
+          expect(res.body.lastName).to.be.a("string");
+          expect(res.body.email).to.be.a("string");
+          expect(res.body.dateOfBirth).to.be.a("string");
+          expect(res.body.id).to.be.a("string");
+          expect(res.body.address).to.be.an("object");
+        })
+
+
+
+        bru.setVar("id", res.body.id);
+
+        console.log("ID =", bru.getVar("id"));
+
+        test("Status code", ()=>{
+          expect(res.status).to.equal(201)
+        })
+
+        test("first name", ()=>{
+          expect(res.body.firstName).to.equal("Madhuri")
+        })
+
+        test("lastName", ()=>{
+          expect(res.body.lastName).to.equal("Mithi")
+        })
+
+        test("Content Type", ()=>{
+          expect(res.headers["content-type"]).to.equal("application/json")
+        })
+
+        test("Server",()=>{
+          expect(res.headers["server"]).to.equal("Heroku")
+        })
+
+        test("ID generated", () => {
+          expect(res.body.id).to.not.be.undefined;
+        });
+
+        test("Response time", () => {
+          expect(res.responseTime).to.be.below(2000);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
